@@ -1,16 +1,20 @@
-import { VectorControl } from "@hmans/controlfreak"
 import { useFrame } from "@react-three/fiber"
 import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
-import { controller } from "./controller"
+import { spatialHashGridSystem } from "./systems/spatialHashGridSystem"
 import { ecs, RevadeEntity } from "./state"
+import { playerInputSystem } from "./systems/playerInputSystem"
+import { velocityLimitSystem } from "./systems/velocityLimitSystem"
+import { velocityDapmingSystem } from "./systems/velocityDapmingSystem"
+import { velocitySystem } from "./systems/velocitySystem"
+import { avoidanceSystem } from "./systems/avoidanceSystem"
 
-const tmpvec3 = new Vector3()
+export const tmpvec3 = new Vector3()
 
 export const Systems = () => {
   useFrame((_, dt) => {
-    playerInputSystem(5)
+    playerInputSystem()
 
     findAttractorsForEnemies()
     followAttractors()
@@ -29,59 +33,6 @@ export const Systems = () => {
 
   return null
 }
-
-const spatialHashGridSystem = system(
-  ecs.world.archetype("transform", "spatialHashing"),
-  (entities) => {
-    for (const entity of entities) {
-      const { transform, spatialHashing } = entity
-      spatialHashing.placeEntity(entity, transform.position)
-    }
-  }
-)
-
-const playerInputSystem = system(
-  ecs.world.archetype("player", "transform", "velocity"),
-  (entities, thrust = 1) => {
-    controller.update()
-    const move = controller.controls.move as VectorControl
-
-    for (const entity of entities) {
-      entity.velocity.add(tmpvec3.set(move.value.x, move.value.y, 0).multiplyScalar(thrust))
-      entity.transform.quaternion.setFromUnitVectors(
-        new Vector3(0, 1, 0),
-        entity.velocity.clone().normalize()
-      )
-    }
-  }
-)
-
-const velocityLimitSystem = system(
-  ecs.world.archetype("velocity", "velocityLimit"),
-  (entities) => {
-    for (const { velocity, velocityLimit } of entities) {
-      velocity.clampLength(0, velocityLimit)
-    }
-  }
-)
-
-const velocityDapmingSystem = system(
-  ecs.world.archetype("velocity", "velocityDamping"),
-  (entities) => {
-    for (const { velocity, velocityDamping } of entities) {
-      velocity.multiplyScalar(velocityDamping)
-    }
-  }
-)
-
-const velocitySystem = system(
-  ecs.world.archetype("velocity", "transform"),
-  (entities, dt: number) => {
-    for (const { velocity, transform } of entities) {
-      transform.position.add(tmpvec3.copy(velocity).multiplyScalar(dt))
-    }
-  }
-)
 
 const spawnNewEnemies = () => {
   ecs.world.createEntity({ enemy: Tag })
@@ -115,35 +66,6 @@ const followAttractors = system(
           .multiplyScalar(0.5)
 
         velocity?.add(acceleration)
-      }
-    }
-  }
-)
-
-const avoidanceSystem = system(
-  ecs.world.archetype("avoidance", "velocity", "transform", "spatialHashing"),
-  (entities) => {
-    for (const { avoidance, velocity, transform, spatialHashing } of entities) {
-      /* Find neighbors */
-      avoidance.neighbors = spatialHashing
-        .getNearbyEntities(transform.position, avoidance.range, 10)
-        .filter(
-          (candidate) =>
-            candidate.transform?.position.distanceTo(transform!.position) <= avoidance.range
-        )
-
-      /* Avoid neighbors */
-      if (avoidance.neighbors.length) {
-        const acceleration = avoidance.neighbors
-          .reduce(
-            (acc, neighbor) => acc.add(neighbor.transform!.position).sub(transform.position),
-            tmpvec3.setScalar(0)
-          )
-          .divideScalar(-avoidance!.neighbors.length)
-          .normalize()
-          .multiplyScalar(2)
-
-        velocity.add(acceleration)
       }
     }
   }
