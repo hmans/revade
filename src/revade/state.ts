@@ -1,7 +1,7 @@
+import { BoundlessGrid } from "@hmans/ingrid"
 import { Archetype, IEntity, Tag } from "miniplex"
 import { createECS } from "miniplex/react"
 import { Object3D, Vector3 } from "three"
-import { SpatialHashGrid } from "../lib/SpatialHashGrid"
 
 export type RevadeEntity = Partial<{
   /* Tags */
@@ -10,7 +10,7 @@ export type RevadeEntity = Partial<{
 
   /* Components */
   transform: Object3D
-  spatialHashing: SpatialHashGrid
+  spatialHashing: BoundlessGrid
   velocity: Vector3
   velocityLimit: number
   velocityDamping: number

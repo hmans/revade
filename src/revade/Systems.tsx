@@ -1,6 +1,6 @@
 import { VectorControl } from "@hmans/controlfreak"
 import { useFrame } from "@react-three/fiber"
-import { Archetype, EntityWithComponents, IEntity, QueriedEntity, Query, Tag } from "miniplex"
+import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
 import { controller } from "./controller"
@@ -35,7 +35,7 @@ const spatialHashGridSystem = system(
   (entities) => {
     for (const entity of entities) {
       const { transform, spatialHashing } = entity
-      spatialHashing.set(entity, transform.position)
+      spatialHashing.placeEntity(entity, transform.position)
     }
   }
 )
@@ -196,7 +196,7 @@ function withInterval<TArgs extends any[]>(
 
 /* Write a standalone system that accepts a list of entities and extra args. Easy to test! */
 const autoRotateSystemNaked = (
-  entities: EntityWithComponents<RevadeEntity, "transform" | "autorotate">[],
+  entities: QueriedEntity<RevadeEntity, ["transform", "autorotate"]>[],
   dt: number
 ) => {
   for (const { transform, autorotate } of entities) {
