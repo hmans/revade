@@ -31,7 +31,7 @@ export const Enemies = () => (
         <ecs.Component name="attractors" data={[]} />
         <ecs.Component
           name="avoidance"
-          data={{ range: 1, neighbors: [], archetype: ecs.world.archetype("enemy") as any }}
+          data={{ range: 1.5, neighbors: [], archetype: ecs.world.archetype("enemy") as any }}
         />
         <ecs.Component name="spatialHashing" data={grid} />
         <ecs.Component name="autorotate" data={{ speed: 1 }} />
