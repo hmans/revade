@@ -282,10 +282,10 @@
   resolved "https://registry.yarnpkg.com/@hmans/controlfreak/-/controlfreak-0.1.8.tgz#231f9f81adb2a9d2c4edfabef2514ffb6c959042"
   integrity sha512-klmqgFu3901IIDCSwXeTNpZXCkn1oWv3f8ifHOLv4lg978aqlcfFJ3LYxHGc0K0ZznW8NkqVhB38yNi9S1REeA==
 
-"@hmans/ingrid@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@hmans/ingrid/-/ingrid-0.0.2.tgz#3db2e945b0dfedf821625bcc375de0abb3707505"
-  integrity sha512-5EFr3nwzr5MCOmBJJWfSh7d+tq4Ci1bsjPoENtydLTyWtWy/xxQJ3qqwNjsy39U6DWXR9h81Z87wStNyIT8J6g==
+"@hmans/ingrid@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@hmans/ingrid/-/ingrid-0.0.3.tgz#d2171bb5b47c778197e3abd1fbe929d9cf98edde"
+  integrity sha512-I0DBi3jBUgFFC6iqpuOcgrQhhVWKkka+5uS+V2HgLvWKjhNeZaUPdl3msVo3K/JdhmaQ8404mPM6kTNhZB8AfQ==
 
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.0.5"

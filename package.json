@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@hmans/controlfreak": "^0.1.8",
-    "@hmans/ingrid": "^0.0.2",
+    "@hmans/ingrid": "^0.0.3",
     "@react-three/drei": "^8.16.5",
     "@react-three/fiber": "^7.0.26",
     "@react-three/postprocessing": "^2.2.4",
