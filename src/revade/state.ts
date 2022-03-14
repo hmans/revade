@@ -10,7 +10,7 @@ export type RevadeEntity = Partial<{
 
   /* Components */
   transform: Object3D
-  spatialHashing: BoundlessGrid
+  spatialHashing: BoundlessGrid<RevadeEntity>
   velocity: Vector3
   velocityLimit: number
   velocityDamping: number

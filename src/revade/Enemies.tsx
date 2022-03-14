@@ -2,9 +2,9 @@ import { BoundlessGrid } from "@hmans/ingrid"
 import { between } from "randomish"
 import { Quaternion } from "three"
 import { makeInstanceComponents } from "../lib/Instances"
-import { ecs } from "./state"
+import { ecs, RevadeEntity } from "./state"
 
-const grid = new BoundlessGrid(50)
+const grid = new BoundlessGrid<RevadeEntity>(50)
 
 const Enemy = makeInstanceComponents()
 

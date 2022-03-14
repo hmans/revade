@@ -17,7 +17,7 @@ export function avoidanceSystem() {
       .getNearbyEntities(transform.position, avoidance.range, 10)
       .filter(
         (candidate) =>
-          candidate.transform?.position.distanceTo(transform!.position) <= avoidance.range
+          candidate.transform!.position.distanceTo(transform!.position) <= avoidance.range
       )
 
     /* Avoid neighbors */
