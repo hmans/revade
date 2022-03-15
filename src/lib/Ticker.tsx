@@ -1,6 +1,22 @@
 import { useFrame } from "@react-three/fiber"
 import { createContext, FC, useContext, useEffect, useState } from "react"
 
+/*
+
+A Ticker for react-three-fiber.
+
+- sits on top of useFrame (with priority configurable)
+- provides structured ticking stages "update", "lateUpdate", "fixed", "lateFixed", "render"
+- fixed/lateFixed are invoked with fixed-step delta times (useful for physics etc.)
+- supports time scaling
+- context-based, so sections of your game can use different time scaling
+
+TODO:
+
+- Time scaling
+
+*/
+
 export type TickerStage = "update" | "lateUpdate" | "fixed" | "lateFixed" | "render"
 
 const TickerContext = createContext<TickerImpl>(null!)
@@ -38,9 +54,7 @@ class TickerImpl {
 export const Ticker: FC<{ priority?: number }> = ({ children, priority = -100 }) => {
   const [ticker] = useState(() => new TickerImpl())
 
-  useFrame((_, dt) => {
-    ticker.tick(dt)
-  }, priority)
+  useFrame((_, dt) => ticker.tick(dt), priority)
 
   return <TickerContext.Provider value={ticker}>{children}</TickerContext.Provider>
 }
