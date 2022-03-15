@@ -1,7 +1,7 @@
 import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
-import { useTicker } from "../lib/Ticker"
+import { useTicker, useTimeScale } from "../lib/Ticker"
 import { ecs, RevadeEntity } from "./state"
 import { avoidanceSystem } from "./systems/avoidanceSystem"
 import { playerInputSystem } from "./systems/playerInputSystem"

@@ -25,6 +25,8 @@ const TickerContext = createContext<TickerImpl>(null!)
 type TickerCallback = (dt: number) => void
 
 class TickerImpl {
+  timeScale: number = 1
+
   private callbacks: Map<TickerStage, TickerCallback[]> = new Map()
 
   on(stage: TickerStage, callback: TickerCallback) {
@@ -39,9 +41,9 @@ class TickerImpl {
   }
 
   tick(dt: number) {
-    this.execute("update", dt)
-    this.execute("lateUpdate", dt)
-    this.execute("render", dt)
+    this.execute("update", dt * this.timeScale)
+    this.execute("lateUpdate", dt * this.timeScale)
+    this.execute("render", dt * this.timeScale)
   }
 
   private execute(stage: TickerStage, dt: number) {
@@ -67,4 +69,17 @@ export const useTicker = (stage: TickerStage, callback: TickerCallback) => {
     ticker.on(stage, callback)
     return () => ticker.off(stage, callback)
   })
+}
+
+export const useTimeScale = (scale: number) => {
+  const ticker = useContext(TickerContext)
+
+  useEffect(() => {
+    const previousTimeScale = ticker.timeScale
+    ticker.timeScale = scale
+
+    return () => {
+      ticker.timeScale = previousTimeScale
+    }
+  }, [ticker, scale])
 }
