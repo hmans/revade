@@ -1,4 +1,3 @@
-import { useThree } from "@react-three/fiber"
 import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
