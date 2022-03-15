@@ -14,6 +14,7 @@ A Ticker for react-three-fiber.
 TODO:
 
 - Time scaling
+- Fixed steps
 
 */
 
