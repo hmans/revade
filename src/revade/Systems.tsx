@@ -14,7 +14,7 @@ export const tmpvec3 = new Vector3()
 
 export const Systems = () => {
   useTicker("update", (dt) => {
-    spawnNewEnemiesSystem()
+    spawnNewEnemiesSystem(dt)
     playerInputSystem()
     findAttractorsForEnemies()
     followAttractors()
@@ -103,12 +103,12 @@ function withInterval<TArgs extends any[]>(
   system: (...args: TArgs) => void,
   interval: number
 ) {
-  let lastTime = performance.now()
-  const intervalMs = interval * 1000
+  let acc = interval
 
-  return (...args: TArgs) => {
-    if (performance.now() >= lastTime + intervalMs) {
-      lastTime += intervalMs
+  return (dt: number, ...args: TArgs) => {
+    acc -= dt
+    if (acc <= 0) {
+      acc += interval
       system(...args)
     }
   }
