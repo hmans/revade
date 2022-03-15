@@ -54,12 +54,12 @@ export function makeInstanceComponents() {
   /* The Instance component will create a new ECS entity storing a reference
      to a three.js scene object. */
   const Instance = forwardRef<Group, GroupProps>(({ children, ...groupProps }, ref) => {
-    const group = useRef<Group>()
+    const group = useRef<Group>(null!)
 
     useEffect(() => {
       const entity = ecs.world.createEntity({
         instance: {
-          sceneObject: group.current!
+          sceneObject: group.current
         }
       })
 

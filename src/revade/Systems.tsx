@@ -1,4 +1,4 @@
-import { useFrame } from "@react-three/fiber"
+import { useFrame, useThree } from "@react-three/fiber"
 import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
@@ -13,7 +13,12 @@ import { avoidanceSystem } from "./systems/avoidanceSystem"
 export const tmpvec3 = new Vector3()
 
 export const Systems = () => {
+  const { gl, scene, camera } = useThree()
+
   useFrame((_, dt) => {
+    spawnNewEnemiesSystem()
+    spatialHashGridSystem()
+
     playerInputSystem()
 
     findAttractorsForEnemies()
@@ -27,9 +32,8 @@ export const Systems = () => {
     autoRotateSystem(dt)
     autoSqueezeSystem(dt)
 
-    spawnNewEnemiesSystem()
-    spatialHashGridSystem()
-  })
+    gl.render(scene, camera)
+  }, -1)
 
   return null
 }
