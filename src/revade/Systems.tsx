@@ -1,39 +1,34 @@
-import { useFrame, useThree } from "@react-three/fiber"
+import { useThree } from "@react-three/fiber"
 import { Archetype, IEntity, QueriedEntity, Query, Tag } from "miniplex"
 import { Vector3 } from "three"
 import { system } from "../lib/systems"
-import { spatialHashGridSystem } from "./systems/spatialHashGridSystem"
+import { useTicker } from "../lib/Ticker"
 import { ecs, RevadeEntity } from "./state"
-import { playerInputSystem } from "./systems/playerInputSystem"
-import { velocityLimitSystem } from "./systems/velocityLimitSystem"
-import { velocityDapmingSystem } from "./systems/velocityDapmingSystem"
-import { velocitySystem } from "./systems/velocitySystem"
 import { avoidanceSystem } from "./systems/avoidanceSystem"
+import { playerInputSystem } from "./systems/playerInputSystem"
+import { spatialHashGridSystem } from "./systems/spatialHashGridSystem"
+import { velocityDapmingSystem } from "./systems/velocityDapmingSystem"
+import { velocityLimitSystem } from "./systems/velocityLimitSystem"
+import { velocitySystem } from "./systems/velocitySystem"
 
 export const tmpvec3 = new Vector3()
 
 export const Systems = () => {
-  const { gl, scene, camera } = useThree()
-
-  useFrame((_, dt) => {
+  useTicker("update", (dt) => {
     spawnNewEnemiesSystem()
-    spatialHashGridSystem()
-
     playerInputSystem()
-
     findAttractorsForEnemies()
     followAttractors()
-
     avoidanceSystem()
 
     velocityLimitSystem()
     velocitySystem(dt)
     velocityDapmingSystem()
+    spatialHashGridSystem()
+
     autoRotateSystem(dt)
     autoSqueezeSystem(dt)
-
-    gl.render(scene, camera)
-  }, -1)
+  })
 
   return null
 }

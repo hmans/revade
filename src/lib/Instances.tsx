@@ -4,6 +4,7 @@ import { createECS } from "miniplex/react"
 import { FC, forwardRef, useEffect, useRef } from "react"
 import mergeRefs from "react-merge-refs"
 import { Group, InstancedMesh, Object3D } from "three"
+import { useTicker } from "./Ticker"
 
 type InstanceEntity = {
   instance: {
@@ -42,7 +43,7 @@ export function makeInstanceComponents() {
       instancedMesh.current!.count = entities.length
     }
 
-    useFrame(updateInstances)
+    useTicker("lateUpdate", updateInstances)
 
     return (
       <instancedMesh ref={instancedMesh} {...props} args={[null!, null!, instanceLimit]}>

@@ -1,4 +1,5 @@
 import { PerspectiveCamera } from "@react-three/drei"
+import { Ticker } from "../lib/Ticker"
 import { Effects } from "./Effects"
 import { Enemies } from "./Enemies"
 import { Player } from "./Player"
@@ -6,9 +7,8 @@ import { Systems } from "./Systems"
 
 export const Game = () => {
   return (
-    <>
-      {/* Just a bunch of normal r3f stuff. */}
-      <Effects />
+    <Ticker priority={2}>
+      <Effects priority={1} />
       <ambientLight intensity={0.2} />
       <directionalLight position={[10, 10, 10]} intensity={0.4} />
       <color attach="background" args={["#111"]} />
@@ -19,6 +19,6 @@ export const Game = () => {
 
       <Player />
       <Enemies />
-    </>
+    </Ticker>
   )
 }
