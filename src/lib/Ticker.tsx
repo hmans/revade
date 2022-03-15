@@ -11,10 +11,6 @@ A Ticker for react-three-fiber.
 - supports time scaling
 - context-based, so sections of your game can use different time scaling
 
-TODO:
-
-- Fixed steps
-
 */
 
 export type TickerStage = "update" | "lateUpdate" | "fixed" | "lateFixed" | "render"
@@ -24,9 +20,11 @@ const TickerContext = createContext<TickerImpl>(null!)
 type TickerCallback = (dt: number) => void
 
 class TickerImpl {
-  timeScale: number = 1
+  timeScale = 1
+  fixedStep = 1 / 60
 
   private callbacks: Map<TickerStage, TickerCallback[]> = new Map()
+  private acc: number = 0
 
   on(stage: TickerStage, callback: TickerCallback) {
     if (!this.callbacks.has(stage)) this.callbacks.set(stage, [])
@@ -39,9 +37,24 @@ class TickerImpl {
     callbacks.splice(pos, 1)
   }
 
-  tick(dt: number) {
+  tick(frameDelta: number) {
+    /* Clamp the deltatime to prevent situations where thousands of frames are executed after
+    the user returns from another tab. */
+    const dt = Math.max(0, Math.min(frameDelta, 1))
+
+    /* Run the normale update callbacks. */
     this.execute("update", dt * this.timeScale)
     this.execute("lateUpdate", dt * this.timeScale)
+
+    /* Run fixed-steps callbacks, based on our internal accumulator. */
+    this.acc += dt * this.timeScale
+    while (this.acc >= this.fixedStep) {
+      this.execute("fixed", this.fixedStep)
+      this.execute("lateFixed", this.fixedStep)
+      this.acc -= this.fixedStep
+    }
+
+    /* Run any registered render callbacks. */
     this.execute("render", dt * this.timeScale)
   }
 
