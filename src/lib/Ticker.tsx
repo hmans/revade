@@ -22,6 +22,7 @@ type TickerCallback = (dt: number) => void
 class TickerImpl {
   timeScale = 1
   fixedStep = 1 / 60
+  maxDelta = 1
 
   private callbacks: Map<TickerStage, TickerCallback[]> = new Map()
   private acc: number = 0
@@ -40,7 +41,7 @@ class TickerImpl {
   tick(frameDelta: number) {
     /* Clamp the deltatime to prevent situations where thousands of frames are executed after
     the user returns from another tab. */
-    const dt = Math.max(0, Math.min(frameDelta, 1))
+    const dt = Math.max(0, this.maxDelta ? Math.min(frameDelta, this.maxDelta) : frameDelta)
 
     /* Run the normale update callbacks. */
     this.execute("update", dt * this.timeScale)
