@@ -94,16 +94,3 @@ export const useTicker = (stage: TickerStage, callback: TickerCallback) => {
     return () => ticker.off(stage, callback)
   })
 }
-
-export const useTimeScale = (scale: number) => {
-  const ticker = useContext(TickerContext)
-
-  useEffect(() => {
-    const previousTimeScale = ticker.timeScale
-    ticker.timeScale = scale
-
-    return () => {
-      ticker.timeScale = previousTimeScale
-    }
-  }, [ticker, scale])
-}
