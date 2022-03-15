@@ -7,7 +7,7 @@ import { Systems } from "./Systems"
 
 export const Game = () => {
   return (
-    <Ticker priority={2}>
+    <Ticker priority={2} timeScale={1}>
       <Effects priority={1} />
       <ambientLight intensity={0.2} />
       <directionalLight position={[10, 10, 10]} intensity={0.4} />

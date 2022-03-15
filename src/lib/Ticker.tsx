@@ -13,7 +13,6 @@ A Ticker for react-three-fiber.
 
 TODO:
 
-- Time scaling
 - Fixed steps
 
 */
@@ -54,8 +53,20 @@ class TickerImpl {
   }
 }
 
-export const Ticker: FC<{ priority?: number }> = ({ children, priority = -100 }) => {
+export const Ticker: FC<{ priority?: number; timeScale?: number }> = ({
+  children,
+  timeScale = 1,
+  priority = -100
+}) => {
   const [ticker] = useState(() => new TickerImpl())
+
+  useEffect(() => {
+    ticker.timeScale = timeScale
+
+    return () => {
+      ticker.timeScale = 1
+    }
+  }, [ticker, timeScale])
 
   useFrame((_, dt) => ticker.tick(dt), priority)
 
